@@ -1,0 +1,321 @@
+#using pranav schema
+use pranav; 
+#DATA DEFINITION LANGUAGE
+show tables;
+#create employee record table
+create table employee(
+emp_id int (10) not null,
+first_name varchar (20),
+last_name varchar (20),
+salary int,
+primary key (emp_id)
+);
+
+show tables;
+#describing the table in row format
+desc employee;
+describe employee;
+#showing the all column in schema 
+select *from employee;
+#alter table is add the new table in schema 
+alter table employee add column contact int;
+describe employee;
+select *from employee;
+#using the alter table rename update the schema
+alter table employee rename column contact to emp_code;
+desc employee;
+select *from employee;
+#using the truncate for the delete the data
+/*truncate table employee;
+desc employee;
+select * from employee;
+#drop table for delete the table
+drop table employee;
+describe employee;
+select *from employee;*/
+#DATA MANIPULATION LANGUAGE
+#insert command using for the inserting the data
+insert into employee(emp_id,first_name , last_name , salary, emp_code)values(101,'PRANAV','MAHAJAN',150000000, 1);
+insert into employee(emp_id,first_name , last_name , salary, emp_code)values(102,'YASH','MAHAJAN',100000000, 2);
+insert into employee(emp_id,first_name , last_name , salary, emp_code)values(103,'KUNAL','MAHAJAN',120000000, 3);
+insert into employee(emp_id,first_name , last_name , salary, emp_code)values(104,'YOGA','MAHAJAN',110000000,4);
+insert into employee(emp_id,first_name , last_name , salary, emp_code)values(105,'KUNAL','CHAUDHARI',13000000,5);
+insert into employee(emp_id,first_name , last_name , salary, emp_code)values(106,'KRUSHNA','PATIL',14000000, 6);
+
+describe employee;
+select *from employee;
+#update command using for the updating the data
+update employee set first_name='SUJAL' where emp_id=102;
+select *from employee;
+update employee set last_name='MAHAJAN' where emp_id=102;
+select *from employee;
+update employee set salary =100 where emp_id=102;
+select *from employee;
+update employee set salary =100 where emp_id=103;
+select *from employee;
+#delete command using for the deleting the data
+delete from employee where emp_id in(103);
+select *from employee;
+#DATA CONTROL LANGUAGE
+#grant is use for the gives access privileges to database
+/*
+grant <privilege list mean column name> on <relation name mean table name> to <user detail>
+#revoke is use for the withdraw access privilege given with the grant command
+#revoke is use for the hide the data from the user
+revoke < privilege list mean column name > on < relation name mean table name > to < user detail > 
+*/
+#TRANSACTION CONTROL LANGUAGE (TCL)
+/*
+command ---> description
+commit   --> save the work done 
+rollback --> restores database to origin state since the last commit
+savepoint--> identity a point in a transaction to which you can roll back later
+*/
+
+#SQL OPERATOR
+#1.WHERE CLAUSE
+#this is show only the required data
+select *from employee where emp_id=102;
+select *from employee where salary=150000000;
+
+#SQL OPERATOR - LOGICAL
+#and operator 
+select *from employee where first_name ='PRANAV'and salary=150000000;
+#or operator
+select *from employee where first_name ='YASH' or salary=150000000;
+#not operator
+select *from employee where first_name ='PRANAV'and salary!=100000000;
+select *from employee where first_name ='PRANAV'and salary!=150000000;
+#SQL OPERATOR - COMPARISON
+select *from employee where salary<100000000;
+select *from employee where salary>100000000;
+select *from employee where salary<=100000000;
+select *from employee where salary>=100000000;
+select *from employee where first_name='PRANAV' and salary<=100000000;
+select *from employee where first_name='PRANAV' and salary>=100000000;
+select *from employee where first_name='PRANAV' and salary!=100000000;
+#SQL OPERATOR - SPECIAL
+select *from employee where salary between 100000000 and 200000000;
+select *from employee where first_name like 'PRANAV';
+select *from employee where last_name like 'M%';
+select *from employee where salary is null;
+select *from employee where salary in (100000000,150000000);
+select distinct (first_name) from employee;
+#SQL OPERATOR - AGGREGATIONS
+select avg(salary) from employee;
+select count(*) from employee;
+select min(salary) from employee;
+select max(salary) from employee;
+select sum(salary) from employee;
+#SQL GROUP BY CLAUSE
+#use alter for create the new column dept
+alter table employee add column dept varchar(20);
+select *from employee;
+#add values in the dept column using update command
+update employee set dept = 'sales' where emp_id=101;
+update employee set dept = 'tech' where emp_id=102;
+update employee set dept = 'content' where emp_id=103;
+update employee set dept = 'sales' where emp_id=104;
+update employee set dept = 'content' where emp_id=105;
+update employee set dept = 'sales'where emp_id=106;
+select *from employee;
+#select max(salary),emp_code from employee group by emp_code
+#select first_name, (salary), dept from employee group by dept
+#SQL HAVING CLAUSE
+select first_name, max(salary), dept from employee group by dept having count(dept)>=2;
+select first_name, avg(salary), dept from employee group by dept having count(dept)>=2;
+#SQL ORDER BY CLAUSE
+#table in decending order
+select *from employee order by salary desc;
+#table in ascending order
+select *from employee order by salary asc;
+#SQL UNION
+create table product1(
+category_id int,
+product_name varchar(20)
+);
+insert into product1 values(1,'NOKIA');
+insert into product1 values(2,'SAMSUNG');
+insert into product1 values(3,'HP');
+insert into product1 values(6,'NIKON');
+select *from product1;
+
+create table product2(
+category_id int,
+product_name varchar(20)
+);
+select *from product2;
+
+insert into product2 values(1,'SAMSUNG');
+insert into product2 values(2,'LG');
+insert into product2 values(3,'HP');
+insert into product2 values(5,'DELL');
+insert into product2 values(6,'APPLE');
+select *from product2;
+
+select product_name from product1
+union
+select product_name from product2;
+
+#SQL UNION ALL
+select category_id, product_name from product1
+union all
+select category_id, product_name from product2;
+#SQL JOIN
+#SQL INNER JOIN
+create table department(
+dept_id int,
+dept varchar(20),
+dept_loc varchar(20)
+);
+insert into department values(1,'content','chicago');
+insert into department values(2,'support','new jersey');
+insert into department values(3,'sales','boston');
+insert into department values(4,'hr','chicago');
+insert into department values(5,'operations','new york');
+select *from department;
+/*
+
+select e.first_name,e.salary,d.dept,d.dept_loc
+from employee e
+inner join department d
+on e.dept=d.dept;
+#SQL LEFT JOIN
+select e.first_name,e.salary, e.dept, d.dept,d.dept_loc
+from employee e
+left join department d
+on e.dept=d.dept;
+#SQL RIGHT JOIN
+select e.first_name,e.salary, e.dept, d.dept,d.dept_loc
+from employee e
+right join department d
+on e.dept=d.dept;
+#SQL FULL OUTER JOIN
+select e.first_name,e.salary, e.dept, d.dept,d.dept_loc
+from employee e
+left join department d
+on e.dept=d.dept
+union
+select e.first_name,e.salary, e.dept, d.dept,d.dept_loc
+from employee e
+right join department d
+on e.dept=d.dept   
+
+*/
+#SQL CROSS JOIN
+select *from employee cross join department;
+#SQL QUERIES
+create table cricket1(
+PLAYER_ID varchar(5)not null,
+PLAYER_NAME varchar(20),
+runs int(3),
+POPULARITY int(3)
+);
+show tables;
+describe cricket1;
+select *from cricket1;
+
+create table cricket2(
+PLAYER_ID int not null,
+PLAYER_NAME varchar(20),
+runs int(3),
+CHARISMA int(3)
+);
+show tables;
+describe cricket2;
+select *from cricket2;
+#union of the two column
+select *from cricket1
+union
+select *from cricket2;
+select PLAYER_NAME from cricket1
+union
+select PLAYER_NAME from cricket2;
+#the player from the test match 1 having popularity higher than the average popularity
+select player_name, popularity from cricket1 where popularity > (select avg(popularity) from cricket1);
+
+select avg(popularity) from cricket1;
+#player_id and player_name that are common in the test match 1 and test match 2
+select player_id, player_name from cricket1 where cricket1.PLAYER_ID in (select PLAYER_ID from cricket2);
+#player where the runs are more than the average runs
+select player_id, player_name, runs from cricket1 where runs>(select avg(runs) from cricket1); 
+
+select avg(runs) from cricket1;
+#table cricket1 where the runs are greater than 50
+select player_id, player_name, runs from cricket1 where runs >50;
+#table cricket1 where player_name start with the 'y' and end with 'v'
+select *from cricket1 where player_name like 'y%v';
+#table cricket1 where player_name does not end with 't'
+select *from cricket1 where PLAYER_NAME not like '%t';
+#dataset used: cricket12
+#combine the cricket1 and cricket2 table
+#player where the charisma value is null
+select *from cricket12;
+select player_id, player_name from cricket12 where charisma is null;
+#separate all player_id into single numeric ids(PL1=1)
+select player_id, substr(player_id,3) from cricket12;
+#mysql query to extract where the charisma is greater than 25
+select player_id, player_name, charisma from cricket12 where charisma > 25;
+
+create database bank;
+use bank;
+
+create table bank_details(
+product char(10),
+quantity int,
+price real,
+purchase_cost decimal(6,2),
+estimated_sale_price float);
+
+show tables;
+describe bank_details;
+select *from bank_details;
+#insert the value in table
+insert into bank_details values('paycard', 3 , 330, 8008,9009);
+insert into bank_details values('paypoint', 4 , 200, 8000,6800);
+#add column in table
+alter table bank_details add geo_location varchar(20);
+describe bank_details;
+select *from bank_details;
+
+select geo_location from bank_details where product='paycard';
+#length of word
+select char_length(product) from bank_details where product='paycard';
+
+alter table bank_details modify product varchar(10);
+
+describe bank_details;
+alter table bank_details modify product varchar(6);
+
+create table bank_holiday(
+holiday date,
+start_time datetime,
+end_time timestamp
+);
+describe bank_holiday;
+select *from bank_holiday;
+#insert the current_date
+insert into bank_holiday values(current_date(),current_time(),current_date());
+#add value in holiday date
+update bank_holiday set holiday = date_add( holiday , interval 10 day);
+select *from bank_holiday;
+#add time and date
+update bank_holiday set end_time = utc_timestamp();
+select *from bank_holiday;
+#change the product name to new_product
+select product as new_product from bank_details;
+select * from bank_details;
+select * from bank_details limit 1;
+#show the column values
+select substr(geo_location,1,5) from bank_details;
+
+
+
+
+
+
+
+
+
+
+

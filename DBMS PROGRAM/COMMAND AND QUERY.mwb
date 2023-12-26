@@ -1,0 +1,874 @@
+#Refer www.mysqltutorial.org
+
+select version();
+select current_timestamp();
+select current_date();
+select version(), current_date();
+select 4+5+1, 5*4*2;
+show databases;
+create database B1_DB1;
+show databases;
+use B1_DB1;
+select database();
+show tables;
+#create a table instructor
+create table instructor (ID int,
+						 name varchar(25) not null,
+                         dept_name varchar(15) not null,
+                         salary numeric (10,3),
+                         primary key (ID));
+desc instructor;
+
+create table Department ( dept_name varchar(15) not null,
+						  building varchar (25) not null,
+                          budget numeric (10,2),
+                          primary key (dept_name));
+                          
+drop table department;
+
+create table instructor_r (ID int,
+						   name varchar(25) not null,
+                           dept_name varchar(15) not null,
+                           salary numeric (10,3),
+                           primary key (ID));
+
+desc instructor_r;
+
+create table Department_r ( dept_name varchar(15) not null,
+						    building varchar (25) not null,
+                            budget numeric (10,2),
+                            primary key (dept_name));
+
+desc department_r;
+
+#---------------------------------------------------------------
+
+# To add data in the Table
+use b1_db1;
+show tables;
+insert into instructor values (100,'George','Computer',110000);
+
+select ID from instructor;
+select ID,name from instructor;
+select * from instructor;
+
+# To add Multiple Data
+insert into instructor values (101,'Krishna','Computer',95000);
+insert into instructor values (102,'Uday','IT',105000);
+insert into instructor values (103,'Swapnil','ETC',112000);
+select * from instructor;
+
+# another way
+
+insert into instructor (ID,name,dept_name,salary)
+			values (104,'Soumitra','Mechanical',115000),
+				   (105,'Manas','ETC',98000),
+                   (106,'Pawan','Electrical',106000),
+                   (107,'Navin','Mechanical',101000),
+                   (108,'Devendra','ETC',97000),
+                   (109,'Parth','Electrical',103000),
+                   (110,'Nilesh','IT',70000);
+            
+insert into instructor values (110,'Nayan','IT',17000);
+insert into instructor values (NULL,'Nayan','IT',17000);
+insert into instructor values (111,'Nayan','IT',1700000000000000000000000000);
+
+#-----------------------------------------------------------------------
+#To apply unique constraint
+create table student (SrNo int auto_increment unique,
+					  Student_ID int primary key,
+                      Name varchar(30) not null,
+                      Address varchar(50));
+insert into student values (1,100,'Virat','Delhi');
+
+select * from student ;
+
+insert into student values (null,101,'Rohit','Mumbai');
+insert into student values (null,102,'Dhoni','Ranchi');
+
+select last_insert_id();
+
+insert into student values (null,103,'Dhoni','Ranchi');
+
+#---------------------------------------------------------------
+# Alter table
+desc student;
+
+alter table student add Mobile_No varchar(10);
+
+#---------------------------------------------------------------
+# Alter table :- modify a column
+
+alter table student modify Address varchar(60) NOT NULL;
+
+#---------------------------------------------------------------
+# Alter table :- rename a column
+
+alter table student change column Address Full_Address varchar(100) NOT NULL;
+
+#-----------------------------------------------
+#Deleting specific attribute from a Table
+
+alter table student drop Mobile_No;
+
+desc student;
+
+#-----------------------------------------------
+# Rename a table
+
+rename table student to TE_student;
+
+show tables;
+
+rename table te_student to student;
+
+#----------------------------------------------------
+# inserting values into department
+
+desc department;
+
+insert into department (dept_name,building,budget)
+			values('Computer','Building No.1',1000000),
+				  ('IT','Building No.2',500000),
+                  ('ETC','Building No.1',800000),
+                  ('Mechanical','Building No.3',900000),
+                  ('Electrical','Building No.2',600000);
+                  
+select * from department;
+
+#----------------------------------------------------
+# inserting values into instructor_r
+
+insert into instructor_r values (100,'George','Computer',110000);
+insert into instructor_r values (101,'Krishna','Computer',95000);
+insert into instructor_r values (102,'Uday','IT',105000);
+
+select * from instructor_r;
+
+delete from instructor_r;
+#----------------------------------------------------
+# inserting values into department _r
+
+insert into department_r (dept_name,building,budget)
+			values('Computer','Building No.1',1000000),
+				  ('IT','Building No.2',500000),
+                  ('ETC','Building No.1',800000);
+                  
+select * from department_r;
+
+delete from department_r;
+
+#---------------------------------------------------------
+
+delete from student ;
+
+show tables;
+
+# To delete table itself 
+
+drop table student;
+
+#-----------------------------------------------
+# To delete specific records 
+
+delete from student where Student_ID=100;
+
+select * from student;
+
+delete from student where Name='Dhoni';
+
+#-----------------------------------------------
+#Deleting specific attribute from a Table
+
+alter table student drop Mobile_No;
+
+desc student;
+
+
+#--------------------------------------------------------
+
+select * from instructor;
+
+select * from department;
+
+select dept_name from instructor;
+
+select distinct dept_name from instructor;
+
+select all dept_name from instructor;
+
+#QUERIES ON SINGLE RELATION
+
+# Question :- Show Id,Name,dept_name of all instructors with salary increased by 1000
+
+select ID,name,dept_name,salary+1000 from instructor; 
+
+
+
+# Question :- Find names of all instructors in the ETC department
+
+select name from instructor where dept_name='ETC';
+
+
+
+# Question :- Find names of all instructors in the ETC department having salary more than 1,00,000
+
+select name from instructor where dept_name='ETC' and salary>100000;
+
+
+
+# Question :- Find names of all instructors in the computer department having salary >= 95000
+
+select name from instructor where dept_name='Computer' and salary>=95000;
+
+
+
+# Question :- Find names of all instructors in the who either belong to mech dept or having salary >102000
+
+select name from instructor where dept_name='Mechanical' or salary>102000;
+
+
+
+# Question :- Find names of all instructors where salary is not equal to 0
+
+select name from instructor where salary<>0;       # Note:- <> and != both mean not equal to
+
+
+# QUERIES ON MULTIPLE RELATIONS
+
+# Retrieve the names of all instructors, with their department names and department building
+
+select name,instructor.dept_name,building 
+from instructor,department 
+where instructor.dept_name=department.dept_name;
+# Note :- This is called Equi Join
+
+#---------------------------------------------------
+#   CARTESIAN PRODUCT
+#---------------------------------------------------
+
+select * from instructor_r;
+
+# First Method
+select * 
+from instructor_r,department_r;
+
+#Second Method
+select *
+from instructor_r
+cross join department_r;
+
+# eg
+select *
+from instructor,department;
+
+select *
+from instructor
+cross join department;
+
+#---------------------------------------------------
+#   Equi Join and Natural Join
+#---------------------------------------------------
+
+select * 
+from instructor_r,department_r
+where instructor_r.dept_name = department_r.dept_name;
+# This is Equi Join
+
+select *
+from instructor_r
+natural join department_r;
+# This is Natural Join
+
+#---------------------------------------------------
+#   To rename attribute using "as" clause
+#---------------------------------------------------
+
+select dept_name from department_r;
+select dept_name as dname from department_r;
+
+select dept_name,building,budget from department_r;
+select dept_name as dname,building,budget from department_r;
+select dept_name as dname,building as bname,budget as buname from department_r;
+
+select name, instructor_r.dept_name, building
+from instructor_r, department_r
+where instructor_r.dept_name = department_r.dept_name;
+
+select name, I.dept_name, building
+from instructor_r as I, department_r as D
+where I.dept_name = D.dept_name;
+
+select name, I.dept_name, building
+from instructor_r  I, department_r  D
+where I.dept_name = D.dept_name;
+
+#-----------------------------------------------------------
+#  String operations - Pattern Matching using like operator
+#-----------------------------------------------------------
+
+select name,dept_name
+from instructor_r
+where dept_name = 'Computer';
+
+# Find out names of instructors whose department names start from Com
+select name,dept_name
+from instructor_r
+where dept_name like 'Com%';
+
+# Find out names of instructors whose department names contain the words 'put'
+select name,dept_name
+from instructor_r
+where dept_name like '%put%';
+
+# Find out names of instructors whose department names contain the letter 't'
+select name,dept_name
+from instructor
+where dept_name like '%t%';
+
+# Find out names of instructors whose department names contain the letter 't'
+select name,dept_name
+from instructor_r
+where dept_name not like 'Com%';
+
+#  Use of '_' (underscore)
+
+select name,dept_name
+from instructor_r
+where dept_name like '__';
+
+select name,dept_name
+from instructor
+where dept_name like '________';
+
+select name,dept_name
+from instructor_r
+where dept_name like '__%';
+
+# Upper and Lower case functions
+
+select upper('k.p.adhiya');
+select lower('COET');
+
+select ucase('k.p.adhiya');
+select lcase('COET');
+
+
+# 'trim' functions
+
+select trim( leading 'my' from 'mytext');
+select trim( leading 'my' from 'mytext_heromy');
+select trim('my' from 'mytext_heromy'); # by default , both are removed
+select trim( trailing 'text' from 'mytext');
+
+# To remove spaces
+
+select ltrim('       asp');
+select length( ltrim ('       asp'));
+
+select length ( rtrim('asp          '));
+
+select length ('     asp     ');
+select length ( trim('     asp     '));
+
+select length ( trim('     asp     ')) as Length_after_trim;
+
+#  ORDER BY clause
+
+select * from instructor order by salary;           # by default ascending order
+
+select * from instructor order by salary asc;       # for ascending order
+
+select * from instructor order by salary desc;      # for descending order
+
+# order by clause - if some instructors have same salary , then we can sort the table in descending order 
+#                   by salary , and in ascending order by name .alter
+
+select * from instructor order by salary desc, name asc;
+
+select * from instructor order by dept_name asc, name desc;
+
+#  between operators
+
+# Find out names , department names and salary of those instructors where salary range is 105000 to 110000
+# Method 1 without using between operator
+ select name,dept_name,salary
+ from instructor 
+ where salary >=105000 and salary <= 110000;
+ 
+# Method 2 using between operator
+select name,dept_name,salary
+from instructor
+where salary between 105000 and 110000;
+
+# Find out names , department names and salary of those instructors where salary range is not 105000 to 110000
+select name,dept_name,salary
+from instructor
+where salary not between 105000 and 110000;
+
+# Find out names , department names and salary of those instructors where name is between Manas and Parth
+select name,dept_name,salary
+from instructor
+where name between 'Manas' and 'Parth';
+
+#-----------------------------------------------------------
+#              Creating a table instructor_nba
+#-----------------------------------------------------------
+create table instructor_nba (ID int,
+							 name varchar(25) not null,
+							 dept_name varchar(15) not null,
+							 salary numeric (10,3),
+							 primary key (ID));
+                             
+desc instructor_nba;
+
+insert into instructor_nba values (101,'Krishna','Computer',95000);
+insert into instructor_nba values (102,'Uday','IT',105000);
+insert into instructor_nba values (103,'Swapnil','ETC',112000);
+insert into instructor_nba values (104,'Soumitra','Mechanical',115000);
+
+select * from instructor_nba ;
+
+#-----------------------------------------------------------
+#                 UNION Operation  
+#-----------------------------------------------------------
+
+select name from instructor_r;
+select name from instructor_nba;
+
+select name from instructor_r
+union
+select name from instructor_nba;
+
+select name from instructor_r
+union all
+select name from instructor_nba;
+
+select * from instructor_r
+union
+select name from instructor_nba;  # ERROR
+
+select * from instructor_r
+union
+select * from instructor_nba;
+
+#-----------------------------------------------------------
+#					INTERSECT Operation
+#-----------------------------------------------------------
+
+# The intersect operator is not supported by MySQL .
+# We can do it by Equi Join and Join On
+
+select instructor_r.name
+from instructor_r,instructor_nba
+where instructor_r.name = instructor_nba.name;
+
+select instructor_r.name
+from instructor_r
+join instructor_nba
+on instructor_r.id = instructor_nba.id ;
+
+#-----------------------------------------------------------
+#					Group By Clause
+#-----------------------------------------------------------
+
+select * from instructor_r;
+
+select count(*) from instructor_r;
+
+select dept_name from instructor;
+
+select dept_name, count(*) as NO_of_records
+from instructor
+group by dept_name;
+
+select dept_name,count(*) as no_of_records
+from instructor_r
+group by dept_name;
+
+select dept_name,count(*) as no_of_records
+from instructor
+group by name;
+
+select dept_name, count(*) as NO_of_records
+from instructor
+group by dept_name
+order by dept_name desc;     #change in order gives syntax error
+
+#-----------------------------------------------------------
+#					Aggregate Function - avg
+#-----------------------------------------------------------
+
+select avg(salary)
+from instructor ;
+
+select avg(salary) as avg_salary_of_computer
+from instructor 
+where dept_name = 'Computer';
+
+select dept_name,avg(salary) as Avg_Salary
+from instructor
+group by dept_name
+order by dept_name desc ;
+
+#-----------------------------------------------------------
+#					Aggregate Function - count
+#-----------------------------------------------------------
+
+select count(*)
+from instructor;
+
+select count(dept_name)
+from instructor;
+
+select count(distinct dept_name)
+from instructor;    # for unique department name
+
+# Find out no. of instructors in ETC department
+select count(*) as no_of_instructors 
+from instructor
+where dept_name = 'ETC';
+
+# Find out no. of instructors in ETC department where salary of instructor is greater than 100000
+select count(*) as no_of_instructors 
+from instructor
+where dept_name = 'ETC' and salary > 100000;
+
+
+
+
+use college_db10;
+select database();
+
+# Aggregate function - sum ()
+select sum(salary) as Total_Salary 
+from instructor;
+
+# Find out total salary paid to the instructors of Computer deptt
+select sum(salary) as Total_Salary 
+from instructor
+where dept_name = 'Computer';
+
+select dept_name as Department, sum(salary) as Total_Salary 
+from instructor
+group by dept_name;
+
+# Aggregate function - min () , max ()
+select min(salary) as Min_Salary 
+from instructor;
+
+select min(salary) as Min_Salary_Mech 
+from instructor
+where dept_name='Mechanical';
+
+select max(salary) as Max_Salary 
+from instructor;
+
+select max(name) as Max_Name 
+from instructor;
+
+# Use of having clause :- find out names of departments where the average salary of
+# instructor is more than 100000
+select dept_name, avg(salary) as Average_Salary   
+from instructor
+group by dept_name; 
+select dept_name, avg(salary) as Average_Salary
+from instructor
+group by dept_name
+having avg(salary) >100000; 
+
+# find out total number of instructors teaching building wise, but don’t consider the instructors of 
+# those departments whose budget is less than or equal to 500000. Then display the result only if total number of 
+# instructors teaching in that building is greater than 3. 
+select building , count(dept_name) as Total_Instructor_in_Building  
+from instructor natural join department
+where budget > 500000
+group by building
+having Total_Instructor_in_Building >3;
+
+select building , count(dept_name) as Total_Instructor_in_Building  
+from instructor natural join department
+where budget >500000
+group by building
+having Total_Instructor_in_Building >=2
+order by building desc;
+
+# Use of Subquery:- find out the instructors whose salary is less than Uday’s salary.
+select name, salary
+from instructor
+where salary <
+			(select salary
+			from instructor
+			where name = 'Uday');
+ 
+ # to find out name of instructor having max salary. Also display his salary 
+select name, salary
+from instructor
+where salary =
+			(select max(salary)
+			from instructor);
+            
+# Use of IN operator
+# find out the names of instructors (along with their ID, their department and salary), 
+# who belong to Computer or IT department or ETC deptt
+select * 
+from instructor
+where dept_name = 'computer' or dept_name ='IT' or dept_name = 'ETC';
+select * 
+from instructor
+where dept_name in ('Computer', 'IT', 'ETC');
+
+SELECT name, salary
+FROM instructor
+WHERE Salary IN (70000, 95000, 98000);
+
+select * 
+from instructor
+where dept_name not in ('Computer', 'IT', 'ETC');
+
+#find out names of instructors and their department names, whose departmental budget is more than 700000.
+select name, instructor.dept_name
+from instructor, department
+where instructor.dept_name = department .dept_name and budget > 700000;
+
+select name, dept_name
+from instructor
+where dept_name in 
+		( select dept_name
+          from department 
+          where budget > 700000);
+          
+# Use of ANY (or SOME ) operator :- find out the names of all instructors whose salary is greater than at least 
+# one instructor in the Electrical department.
+use college_db10;
+select name
+from instructor 
+where salary >some
+				(select salary
+                from instructor
+                where dept_name='Electrical');
+
+# find out the names of all instructors that have a salary grater than each instructor in Electrical deptt
+select name
+from instructor 
+where salary >all
+				(select salary
+                from instructor
+                where dept_name='Electrical');
+                
+# To change value of attribute - UPDATE command
+create table faculty select * from instructor;
+show tables;
+select * from faculty;
+update faculty
+set salary = 125000
+where ID=101;    # Run on shell
+select * from faculty;
+
+# Creating two more tables 
+show tables;
+create table employee (EID int, 
+									Ename varchar(25) not null, 
+									E_did int, primary key (EID));
+show tables;
+
+create table department_all (d_id int, 
+											dept_name varchar(15) not null, 
+                                            primary key (d_id));
+show tables;
+
+insert into employee values (100,'George', 1);
+insert into employee values (101,'Krishna', 1);
+insert into employee values (102,'Uday', 2);
+insert into employee values (200,'Bhaskar', 15);
+select * from employee;
+
+insert into department_all values (1,'Computer');
+insert into department_all values (2,'IT');
+insert into department_all values (3,'ETC');
+insert into department_all values (4,'Mechanical');
+select * from department_all;
+
+# Joins.......
+select *
+from employee, department_all
+where employee.E_did=department_all.d_id;   
+select *
+from employee
+join department_all
+on employee.E_did=department_all.d_id; 
+
+select *
+from employee
+left join department_all         # OR left outer join
+on employee.E_did=department_all.d_id;
+
+select *
+from department_all
+left join employee
+on employee.E_did=department_all.d_id;
+
+select *
+from employee
+right join department_all
+on employee.E_did=department_all.d_id;
+
+select *
+from employee
+full join department_all
+on employee.E_did=department_all.d_id;   # Error 
+
+select *
+from employee
+left join department_all
+on employee.E_did=department_all.d_id
+union all
+select *
+from employee
+right join department_all
+on employee.E_did=department_all.d_id;  
+
+# View....
+create view faculty_view_for_students as
+	select name ,dept_name
+	from faculty
+	where dept_name='ETC';
+
+show full tables;
+select * from faculty_view_for_students;
+
+select * from faculty_view_for_students
+order by name desc;
+
+update faculty_view_for_students
+set name='KPA'
+where name='Manas'; 
+
+select * from faculty_view_for_students;
+
+select * from faculty;
+
+# Function....
+delimiter $$
+create function dept_count(dept_name varchar(15))
+	returns integer
+    deterministic
+    begin 
+	declare d_count integer;
+		select count(*) into d_count
+		from instructor
+		where instructor.dept_name = dept_name;
+	return d_count;
+    end 
+    $$
+delimiter ;
+
+show function status;
+select dept_count('ETC');
+select dept_count('Mechanical');
+
+select distinct dept_name
+from instructor
+where dept_count(dept_name)>2;
+
+delimiter $$
+create function Hello1 (string_name varchar(15))
+	returns varchar(50)
+    deterministic
+    begin
+		return concat('Hello students, ',string_name,', !!');
+	end
+$$
+delimiter ;
+
+select hello1('how are you ?');
+select hello1('I am fine');
+
+# Procedure.....
+# passing parameters...
+delimiter $$
+create procedure dept_count_proc(in dept_name varchar(15), out d_count int)
+	begin 
+		select count(*) into d_count
+		from instructor
+        where instructor.dept_name = dept_name;
+	end 
+$$
+delimiter ;
+show procedure status;
+
+call dept_count_proc('IT', @dept_count);
+select @dept_count;
+
+# Procedure :- if----then----else
+delimiter $$
+create procedure count_proc_ifthenelse (in dept_name varchar(15), out d_count int, out inst_count_level varchar(15))
+	begin 
+		select count(*) into d_count
+		from instructor
+        where instructor.dept_name = dept_name;
+        if d_count>2 then
+			set inst_count_level='Excellent';
+		elseif d_count=2 then
+			set inst_count_level='Good';
+		elseif d_count<2 then
+			set inst_count_level='Poor';
+		end if;
+    end
+$$
+delimiter ;
+
+call count_proc_ifthenelse('ETC', @dept_count, @count_level);
+select @dept_count, @count_level;
+call count_proc_ifthenelse('IT', @dept_count, @count_level);
+select @dept_count, @count_level;
+
+# Triggers ---
+# Before insert
+create table staff_salary (ID int, 
+										 name varchar(25) not null, 
+                                         salary numeric (10,3), 
+                                         net_salary numeric (10,3), 
+                                         primary key (ID));
+show tables;
+
+delimiter $$
+create trigger trigger_before_insert before insert 
+on staff_salary for each row
+begin
+set new.net_salary = new.salary - ( new.salary * 0.10);
+end 
+$$
+delimiter ;
+show triggers;
+insert into staff_salary values (100, 'George', 110000, -10);
+insert into staff_salary values (101, 'Krishna', 95000, null);
+insert into staff_salary values (102, 'Uday', 105000, 100);
+select * from staff_salary;
+
+# after insert....
+create table message (disp_message varchar(30) not null);
+show tables;
+
+delimiter $$
+create trigger trigger_after_insert after insert 
+on staff_salary for each row
+begin
+if new.salary<100000
+	then 
+    insert into message values (' Less Salary....');
+else
+	insert into message values (' Good Salary....');
+end if;
+end 
+$$
+delimiter ;
+
+show triggers;
+insert into staff_salary values (103, 'Swapnil', 112000, 100);
+insert into staff_salary values (104, 'Murali', 90000, 120);
+insert into staff_salary values (105, 'Vijay', 80000, 120);
+select * from staff_salary;    
+select * from message;
+
+

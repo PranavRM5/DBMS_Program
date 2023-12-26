@@ -1,0 +1,38 @@
+C:\Program Files\MySQL\MySQL Workbench 8.0
+C:\Program Files\MySQL\MySQL Shell 8.0\bin
+\sql
+\connect root@localhost:3306
+show databases;
+
+mysql password:- PranavMahajan510@
+
+rrt
+row record taple(row)
+fac
+field attribute column
+constraint restriction
+
+
+#Refer:- www.mysqltutorial.org*/
+
+select version();
+select current_date();
+select current_timestamp();
+select version(),current_date();
+select 4+1+5,5*4*2;
+
+create database I2_DB1;
+show databases;
+use I2_DB1;
+select database();
+show tables;
+create table instructor(
+ID int,
+name varchar(25)not null,
+dept_name varchar(15)not null,
+salary numeric(10,3),
+primary key(ID));
+show tables;
+
+desc instructor;
+describe instructor;

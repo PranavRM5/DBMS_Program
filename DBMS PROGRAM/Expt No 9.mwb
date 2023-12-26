@@ -1,0 +1,72 @@
+# Expt No. 9 (B-03)
+# Write a program to demonstrate view.
+
+create database RMS_2;
+use RMS_2;
+select database();
+
+create table Passenger(P_ID int primary key,
+									P_name varchar(20),
+                                    Age int,
+                                    Gender char(10),
+                                    Ticket_ID int,
+                                    PNR int);
+
+select * from Passenger;
+describe passenger;
+
+insert into Passenger values(201,'John',21,'Male',596,308123905);
+insert into Passenger values(217,'Mark',24,'Male',136,1265577771);
+insert into Passenger values(239,'Alice',29,'Female',245,1975364587);
+insert into Passenger values(340,'Jenny',32,'Female',169,2110755678);
+insert into Passenger values(367,'Tony',24,'Male',101,2120017791);
+
+select * from Passenger;
+
+create table Ticket(PNR int primary key, 
+							 Ticket_ID int, 
+                             Arrtime time, 
+                             Deptime time, 
+                             Trainno int, 
+                             Tktamt int, 
+                             Seat_no int, 
+                             Reserve_status char(10));
+show tables;
+desc Ticket;
+
+insert into Ticket values(308123905,596,'20:04:15','20:07:19',21673,420,70,'CNF');
+insert into Ticket values(1265577771,136,'12:47:10','12:50:10',22154,376,15,'CNF');
+insert into Ticket values(1975364587,245,'07:40:15','07:45:58',19134,298,63,'CNF');
+insert into Ticket values(2110755678,169,'16:20:38','16:24:34',27139,380,37,'CNF');
+insert into Ticket values(2120017791,101,'04:35:10','04:40:10',12139,289,12,'CNF');
+
+select * from Ticket;
+
+# View creation:-
+use RMS_2;
+select * from Passenger;
+select * from Ticket;
+# creating a view V2
+create view v2 as
+select * from Passenger
+where Age>25;
+select * from V2;
+
+select * 
+from Passenger;
+insert into V2 values(688,'Korth',31,'Male',370,2120017791);
+select * from V2;
+select * from Passenger;
+
+# updation
+update v2        
+set Age=39
+where P_name='Alice';
+select * from V2;
+select * from Passenger;
+
+#deletion
+delete from V2
+where P_name='Korth';
+select * from V2;
+select * from Passenger;

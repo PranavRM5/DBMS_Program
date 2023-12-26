@@ -1,0 +1,179 @@
+select version();
+select current_date();
+select current_timestamp();
+select version(),current_date();
+select 4+1+5,5*4*2;
+
+create database I2_DB1;
+show databases;
+use I2_DB1;
+select database();
+show tables;
+create table instructor(
+ID int,
+name varchar(25)not null,
+dept_name varchar(15)not null,
+salary numeric(10,3),
+primary key(ID));
+show tables;
+
+desc instructor;
+describe instructor;
+insert into instructor values (100,'GEORGE', 'COMPUTER',110000);
+select id from instructor;
+select id, name from instructor;
+select *from instructor;
+
+insert into instructor values (101,'KRISHNA', 'COMPUTER',95000);
+insert into instructor values (102,'UDAY', 'IT',105000);
+insert into instructor values (103,'SWAPNIL','ETC',112000);
+select *from instructor;
+insert into instructor(id,name,dept_name,salary) 
+values (104,'SOUMITRA','MECHANICAL',115000),
+(105,'MANAS','ETC',98000),
+(106,'PAVAN','ELECTRICAL',106000),
+(107,'NAVIN','MECHANICAL',101000),
+(108,'DEVENDRA','ETC',97000),
+(109,'PARTH','ELECTRICAL',103000),
+(110,'NILESH','IT',70000);
+
+select *from instructor;
+
+insert into instructor values (110,'NAYAN','IT',17000);
+insert into instructor values (NULL,'NARAYAN', 'IT',17000);
+insert into instructor values (111,'NILOFER','IT',700000000000);
+
+create table STUDENT(
+srno int auto_increment unique,
+student_id int primary key,
+name varchar(30)not null,
+address varchar(50));
+show tables;
+describe student;
+select *from student;
+
+insert into student values (1,100,'virat','delhi');
+select *from student;
+insert into student values (null,101,'rohit','mumbai');
+select *from student;
+insert into student values (null,102,'dhoni','ranchi');
+select *from student;
+select last_insert_id();
+select * from instructor;
+show tables;
+select *from student;
+
+insert into student values (null,103,'dhoni','ranchi');
+select *from student;
+select last_insert_id();
+
+#to delete records
+delete from student;
+select *from student;
+show tables;
+insert into student values (1,100,'virat','delhi');
+select *from student;
+insert into student values (null,101,'rohit','mumbai');
+select *from student;
+insert into student values (null,102,'dhoni','ranchi');
+select *from student;
+drop table student;
+select * from student;
+show tables;
+
+#delete specific record
+delete from student where student_id=100;
+select *from student;
+delete from student where name = 'dhoni';
+describe student;
+alter table student add mobile_no varchar(10);
+#alter table and modify column
+alter table student modify address varchar(60) not null;
+describe student;
+select *from student;
+#alter table rename a column
+alter table student change column address full_address varchar(100) not null;
+describe student;
+select *from student;
+#deleting specific attribute from a table
+alter table student drop mobile_no;
+describe student;
+select *from student;
+#rename table
+rename table student to TE_student;
+show tables;
+describe student;
+select *from te_student;
+rename table TE_student to student;
+show tables;
+describe student;
+select *from student;
+
+#select...from...where
+select * from instructor;
+select distinct dept_name from instructor;
+select all dept_name from instructor;
+#show id name  dept_name of all instructor with salary increase by 1000 
+select id, name , dept_name , salary+1000 from instructor;
+# it did not make changes into the permanent database that is stored permanently into the system
+select * from instructor;
+#find the name of all instructor in the etc department
+select name from instructor where dept_name='etc';
+#find the name of all instructor in the etc department having salary more than 100000
+select name from instructor where dept_name='etc'and salary>100000;
+#find the name of all instructor in the computer department having salary greater than or eqaul to 95000
+select name from instructor where dept_name='computer'and salary>=95000;
+#find the names of all instructor who either belong to mechanical department or having salry greater than 102000
+select name from instructor where dept_name='mechanical'or salary>102000;
+drop tables instructor;
+#find the name of all instructor where salary is not equal to zero
+select name from instructor where salary!=0;
+
+#find 
+create table department(
+dept_name varchar(15),
+building varchar (15)not null,
+budget numeric(10,2)
+);
+show tables;
+describe department;
+select *from department;
+insert into department(dept_name,building,budget)values('computer','building no. 1', 1000000),
+('it','building no. 2', 500000),
+('etc','building no. 1', 800000),
+('mechanical','building no. 3', 900000),
+('electrical','building no. 2', 600000);
+drop tables department;
+select *from department;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

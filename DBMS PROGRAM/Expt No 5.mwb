@@ -1,0 +1,110 @@
+# Experiment No. 5
+# SQL Queries: The queries should involve SQL feature such as aggregate functions,
+# group by clause, having clause, order by clause
+
+create database RMS_2;
+show databases;
+use RMS_2;
+select database();
+
+
+create table Ticket(PNR int Primary key, 
+							 Ticket_ID int, 
+                             Arrtime time, 
+                             Deptime time, 
+                             Trainno int, 
+                             Tktamt int, 
+                             Seat_no int, 
+                             Reserve_status char(10));
+show tables;
+desc Ticket;
+select * from Ticket;
+
+# Inserting Records
+insert into Ticket values(308123905,596,'20:04:15','20:07:19',21673,420,70,'CNF');
+insert into Ticket values(1265577771,136,'12:47:10','12:50:10',22154,376,15,'CNF');
+insert into Ticket values(1975364587,245,'07:40:15','07:45:58',19134,298,63,'CNF');
+insert into Ticket values(2110755678,169,'16:20:38','16:24:34',27139,380,37,'CNF');
+insert into Ticket values(2120017791,101,'04:35:10','04:40:10',12139,289,12,'CNF');
+select * from Ticket;
+
+create table Passenger(P_ID int Primary key,
+									P_name varchar(20),
+                                    Age int,
+                                    Gender char(10),
+                                    Ticket_ID int,
+                                    PNR int);
+show tables;
+desc Passenger;
+
+insert into Passenger values(201,'John',21,'Male',596,308123905);
+insert into Passenger values(217,'Mark',24,'Male',136,1265577771);
+insert into Passenger values(239,'Alice',29,'Female',245,1975364587);
+insert into Passenger values(340,'Jenny',32,'Female',169,2110755678);
+insert into Passenger values(367,'Tony',24,'Male',101,2120017791);
+select * from Passenger;
+
+#Aggregate functions:-
+select * from ticket;
+select avg(Tktamt) 
+from Ticket;
+select avg(Tktamt) as Avg_Tkt_Amt 
+from Ticket;
+select min(Tktamt)
+from Ticket;
+select max(Tktamt)
+from Ticket;
+select sum(Tktamt) as Total_Amt 
+from Ticket;
+select count(P_ID) as No_Of_Passengers 
+from Passenger;
+
+# use of logical conditions
+select * from passenger;
+select * 
+from Passenger
+where Age between 20 and 22 AND Gender='Male';
+select * 
+from Passenger
+where Age between 20 and 30
+AND(Gender='Male' OR Gender='Female');
+
+# use of order by clause
+select * 
+from Passenger 
+order by P_name;
+select * 
+from Passenger 
+order by P_name desc;
+select * 
+from Passenger 
+order by Gender asc;
+select * 
+from Passenger 
+order by Gender asc, P_ID desc;
+
+# use of Grpoup by clause
+select * 
+from Passenger;
+select Gender,avg(Age) f
+from Passenger 
+group by Gender;
+select Gender,count(P_ID) as No_Of_Passengers 
+from Passenger 
+group by Gender;
+
+# use of having clause
+select Gender,avg(Age) as Avg_Age 
+from Passenger 
+group by Gender 
+having Avg_Age >20;
+
+select * from ticket;
+select * from passenger;
+
+select Passenger.Gender,avg(Ticket.Tktamt)as Avg_Amt 
+from Ticket 
+join Passenger       # you can use inner join
+on Ticket.PNR=Passenger.PNR
+group by Gender
+having avg(Tktamt)>350;
